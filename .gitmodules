@@ -1,12 +1,3 @@
-[submodule "3rd/imgui/source"]
-	path = 3rd/imgui/source
-	url = https://github.com/ocornut/imgui.git
-[submodule "3rd/SDL3"]
-	path = 3rd/SDL3
-	url = https://github.com/libsdl-org/SDL.git
-[submodule "3rd/glm"]
-	path = 3rd/glm
-	url = https://github.com/g-truc/glm.git
-[submodule "3rd/SDL3_image"]
-	path = 3rd/SDL3_image
-	url = https://github.com/libsdl-org/SDL_image.git
+[submodule "xdwnd"]
+	path = xdwnd
+	url = https://gitee.com/xiaodouxd/xdwnd.git
