@@ -110,8 +110,8 @@ namespace CC
     const glm::vec2& ImgCtrl::getForce() { return _inst->force; }
     void ImgCtrl::clear()
     {
-        auto err = vkDeviceWaitIdle(CC::VulkanMgr::getDev());
-        CC::VulkanMgr::checkVkResultCtype(err);
+        auto err = vkDeviceWaitIdle(XD::VulkanMgr::getDev());
+        XD::VulkanMgr::checkVkResultCtype(err);
         return _inst->imgs.clear();
     }
 }

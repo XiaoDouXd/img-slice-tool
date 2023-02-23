@@ -4,9 +4,9 @@
 #include <map>
 
 #include "clipCtrl.h"
-#include "entrance.h"
 #include "ui/util/polyTest.hpp"
 #include "ui/util/rectTest.hpp"
+#include "xdBase.h"
 
 namespace CC
 {

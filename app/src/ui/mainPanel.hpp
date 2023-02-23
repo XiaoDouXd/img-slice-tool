@@ -3,18 +3,20 @@
 #include <list>
 #include <sstream>
 
-#include "entrance.h"
+#include "xdBase.h"
 #include "imgui_internal.h"
 
-#include "base/wndBase.hpp"
-#include "core/imgCtrl.h"
 #include "clipCtrlPanel.hpp"
 #include "clipPicPanel.hpp"
+#include "core/imgCtrl.h"
+#include "xdBase/wndBase.hpp"
 
 #include "staticPanelData.h"
 
 namespace CC::UI
 {
+    using namespace XD;
+
     static size_t picPanelId = 0;
     static void openPicPanel()
     {
@@ -112,7 +114,7 @@ namespace CC::UI
     protected:
         void onShow(WndDataBaseHolder* ) override
         {
-            CC::App::setBGColor(ImVec4(0.22f, 0.22f, 0.22f, 1.00f));
+            XD::App::setBGColor(ImVec4(0.22f, 0.22f, 0.22f, 1.00f));
             windowFlags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar;
             windowFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar;
             windowFlags |= ImGuiWindowFlags_NoDocking;

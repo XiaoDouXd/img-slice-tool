@@ -1,8 +1,11 @@
 #pragma once
 
 #include <cstdint>
+#include <string>
 #include <list>
 #include <map>
+
+#include "xdBase.h"
 
 namespace CC
 {
@@ -82,7 +85,7 @@ namespace CC
         {
             if (_ops.empty() || _curOp == _ops.cbegin()) return;
             _curOp--;
-            App::logInfo("撤回: ", getOpName(_curOp->first), "\n");
+            XD::App::logInfo("撤回: ", getOpName(_curOp->first), "\n");
             undoAction(_curOp->first, _curOp->second);
         }
 
@@ -100,7 +103,7 @@ namespace CC
 
             _ops.emplace_back(std::pair<Op, PrstData>(std::move(op), todoPreT(op, std::move(data))));
             _curOp = --_ops.end();
-            App::logInfo("执行: ", getOpName(op), "\n");
+            XD::App::logInfo("执行: ", getOpName(op), "\n");
             redoAction(_curOp->first, _curOp->second);
             _curOp++;
         }
@@ -108,7 +111,7 @@ namespace CC
         void redo()
         {
             if (_curOp == _ops.cend()) return;
-            App::logInfo("重做: ", getOpName(_curOp->first), "\n");
+            XD::App::logInfo("重做: ", getOpName(_curOp->first), "\n");
             redoAction(_curOp->first, _curOp->second);
             _curOp++;
         }

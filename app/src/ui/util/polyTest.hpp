@@ -1,7 +1,7 @@
 #pragma once
 
-#include "entrance.h"
 #include "glm.hpp"
+#include "xdBase.h"
 
 namespace CC
 {

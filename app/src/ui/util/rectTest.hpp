@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "entrance.h"
 #include "glm.hpp"
 #include "imgui_internal.h"
 

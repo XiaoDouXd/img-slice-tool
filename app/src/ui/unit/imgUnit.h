@@ -4,7 +4,7 @@
 #include <locale>
 
 #include "stb_image.h"
-#include "entrance.h"
+#include "xdBase.h"
 
 namespace CC::UI
 {
@@ -12,7 +12,7 @@ namespace CC::UI
 
     static inline uint32_t findMemoryType(uint32_t type_filter, vk::MemoryPropertyFlags properties)
     {
-        vk::PhysicalDeviceMemoryProperties mem_prop = VulkanMgr::getPhyDev().getMemoryProperties();
+        vk::PhysicalDeviceMemoryProperties mem_prop = XD::VulkanMgr::getPhyDev().getMemoryProperties();
 
         for (uint32_t i = 0; i < mem_prop.memoryTypeCount; i++)
             if ((type_filter & (1 << i)) && (mem_prop.memoryTypes[i].propertyFlags & properties) == properties)
@@ -74,7 +74,7 @@ namespace CC::UI
                 std::cerr << e.what() << '\n';
 #endif
             }
-            if (!_srcData) throw Exce(__LINE__, __FILE__, "ImgUnit: 读取图像文件错误");
+            if (!_srcData) throw XD::Exce(__LINE__, __FILE__, "ImgUnit: 读取图像文件错误");
             _srcDataSize = _w * _h * _channels;
 
             // --------------------- 提呈到 vk
@@ -85,7 +85,7 @@ namespace CC::UI
         {
             if (_isReleased) return;
             releaseSrcData();
-            auto& dev = VulkanMgr::getDev();
+            auto& dev = XD::VulkanMgr::getDev();
             ImGui_ImplVulkan_RemoveTexture(_ds);
             dev.freeMemory(_uBufMemory);
             dev.destroyBuffer(_uBuf);
@@ -142,13 +142,13 @@ namespace CC::UI
             info.sharingMode = vk::SharingMode::eExclusive;
             info.initialLayout = vk::ImageLayout::eUndefined;
 
-            _img = VulkanMgr::getDev().createImage(info);
-            vk::MemoryRequirements req = VulkanMgr::getDev().getImageMemoryRequirements(_img);
+            _img = XD::VulkanMgr::getDev().createImage(info);
+            vk::MemoryRequirements req = XD::VulkanMgr::getDev().getImageMemoryRequirements(_img);
             vk::MemoryAllocateInfo alloc_info;
             alloc_info.allocationSize = req.size;
             alloc_info.memoryTypeIndex = findMemoryType(req.memoryTypeBits, vk::MemoryPropertyFlagBits::eDeviceLocal);
-            _imgMemory = VulkanMgr::getDev().allocateMemory(alloc_info);
-            VulkanMgr::getDev().bindImageMemory(_img, _imgMemory, 0);
+            _imgMemory = XD::VulkanMgr::getDev().allocateMemory(alloc_info);
+            XD::VulkanMgr::getDev().bindImageMemory(_img, _imgMemory, 0);
 
             // 创建视图和采样器
             vk::ImageViewCreateInfo view_info;
@@ -158,7 +158,7 @@ namespace CC::UI
             view_info.subresourceRange.aspectMask = vk::ImageAspectFlagBits::eColor;
             view_info.subresourceRange.levelCount = 1;
             view_info.subresourceRange.layerCount = 1;
-            _imgView = VulkanMgr::getDev().createImageView(view_info);
+            _imgView = XD::VulkanMgr::getDev().createImageView(view_info);
 
             vk::SamplerCreateInfo sampler_info;
             sampler_info.magFilter = vk::Filter::eNearest;
@@ -170,7 +170,7 @@ namespace CC::UI
             sampler_info.minLod = -1000;
             sampler_info.maxLod = 1000;
             sampler_info.maxAnisotropy = 1.0f;
-            _sampler = VulkanMgr::getDev().createSampler(sampler_info);
+            _sampler = XD::VulkanMgr::getDev().createSampler(sampler_info);
 
             // 引入 imgui 接口
             _ds = ImGui_ImplVulkan_AddTexture(_sampler, _imgView, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
@@ -180,30 +180,30 @@ namespace CC::UI
             buf_info.size = _srcDataSize;
             buf_info.usage = vk::BufferUsageFlagBits::eTransferSrc;
             buf_info.sharingMode = vk::SharingMode::eExclusive;
-            _uBuf = VulkanMgr::getDev().createBuffer(buf_info);
-            req = VulkanMgr::getDev().getBufferMemoryRequirements(_uBuf);
+            _uBuf = XD::VulkanMgr::getDev().createBuffer(buf_info);
+            req = XD::VulkanMgr::getDev().getBufferMemoryRequirements(_uBuf);
             alloc_info.allocationSize = req.size;
             alloc_info.memoryTypeIndex = findMemoryType(req.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible);
-            _uBufMemory = VulkanMgr::getDev().allocateMemory(alloc_info);
-            VulkanMgr::getDev().bindBufferMemory(_uBuf, _uBufMemory, 0);
+            _uBufMemory = XD::VulkanMgr::getDev().allocateMemory(alloc_info);
+            XD::VulkanMgr::getDev().bindBufferMemory(_uBuf, _uBufMemory, 0);
 
             // 提呈到显存
-            void* map = VulkanMgr::getDev().mapMemory(_uBufMemory, 0, _srcDataSize);
+            void* map = XD::VulkanMgr::getDev().mapMemory(_uBufMemory, 0, _srcDataSize);
             memcpy(map, _srcData, _srcDataSize);
             std::array<vk::MappedMemoryRange, 1> ranges = {};
             ranges[0].setMemory(_uBufMemory);
             ranges[0].size = _srcDataSize;
-            VulkanMgr::getDev().flushMappedMemoryRanges(ranges);
-            VulkanMgr::getDev().unmapMemory(_uBufMemory);
+            XD::VulkanMgr::getDev().flushMappedMemoryRanges(ranges);
+            XD::VulkanMgr::getDev().unmapMemory(_uBufMemory);
 
             // 提呈渲染指令
-            vk::CommandPool cmdPool = ImguiMgr::getHWnd().Frames[ImguiMgr::getHWnd().FrameIndex].CommandPool;
+            vk::CommandPool cmdPool = XD::ImguiMgr::getHWnd().Frames[XD::ImguiMgr::getHWnd().FrameIndex].CommandPool;
             std::vector<vk::CommandBuffer> cmdBuf;
             vk::CommandBufferAllocateInfo cmdAlloc_info;
             cmdAlloc_info.level = vk::CommandBufferLevel::ePrimary;
             cmdAlloc_info.commandPool = cmdPool;
             cmdAlloc_info.commandBufferCount = 1;
-            cmdBuf = VulkanMgr::getDev().allocateCommandBuffers(cmdAlloc_info);
+            cmdBuf = XD::VulkanMgr::getDev().allocateCommandBuffers(cmdAlloc_info);
 
             vk::CommandBufferBeginInfo begin_info;
             begin_info.flags = vk::CommandBufferUsageFlagBits::eOneTimeSubmit;
@@ -250,8 +250,8 @@ namespace CC::UI
             vk::SubmitInfo end_info;
             end_info.setCommandBuffers(cmdBuf);
             cmdBuf.back().end();
-            VulkanMgr::getQueue().submit(end_info);
-            VulkanMgr::getDev().waitIdle();
+            XD::VulkanMgr::getQueue().submit(end_info);
+            XD::VulkanMgr::getDev().waitIdle();
 
             _desc = std::make_unique<ImageUnitDesc>();
             _desc->data = _srcData;

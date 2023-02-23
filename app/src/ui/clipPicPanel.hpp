@@ -3,13 +3,13 @@
 #include <cmath>
 #include <string>
 
+#include "clipCtrlPanel.hpp"
 #include "core/clipCtrl.h"
 #include "core/fileCtrl.h"
 #include "core/imgCtrl.h"
-#include "base/wndBase.hpp"
 #include "math.h"
 #include "unit/imgUnit.h"
-#include "clipCtrlPanel.hpp"
+#include "xdBase/wndBase.hpp"
 
 #include "imgui_internal.h"
 
@@ -20,7 +20,7 @@ namespace CC::UI
     const ImageUnit::ImageUnitDesc ImageUnit::_emptyImgUnitDesc = {};
 
     /// @brief 主界面 UI
-    class ClipPicPanel : public WndBase<ClipPicPanel>
+    class ClipPicPanel : public XD::WndBase<ClipPicPanel>
     {
     private:
         // ------------------- 窗口设置
@@ -53,7 +53,7 @@ namespace CC::UI
         std::string _posStr            = {};
 
     protected:
-        void onShow(WndDataBaseHolder*) override
+        void onShow(XD::WndDataBaseHolder*) override
         {
             if (ImgCtrl::empty())
             {
@@ -63,8 +63,8 @@ namespace CC::UI
 
             _refreshP0 = true;
             refreshData();
-            WndMgr::open<CtrlPanel>();
-            registerEvent<StaticEvent::OnShortcut>([this](Shortcut k){this->onShortcut(k);});
+            XD::WndMgr::open<CtrlPanel>();
+            registerEvent<XD::StaticEvent::OnShortcut>([this](XD::Shortcut k){this->onShortcut(k);});
         }
 
         void onRefresh() override
@@ -156,7 +156,7 @@ namespace CC::UI
 
             if (rectTest({ImGui::GetMousePos().x, ImGui::GetMousePos().y}, _wPos, _wMax))
             {
-                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !ImguiMgr::getIO().KeyAlt)
+                if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left) && !XD::ImguiMgr::getIO().KeyAlt)
                 {
                     for (auto& i : _selectedCache) i = false;
                     curSelectedClipsReset = true;
@@ -164,7 +164,7 @@ namespace CC::UI
                 if (ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Middle))
                     _s = 1.f;
 
-                if (ImguiMgr::getIO().KeyCtrl && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !ImguiMgr::getIO().KeyAlt)
+                if (XD::ImguiMgr::getIO().KeyCtrl && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !XD::ImguiMgr::getIO().KeyAlt)
                 {
                     for (size_t i = 0; i < ClipCtrl::getCurClips().size(); i++)
                     {
@@ -173,7 +173,7 @@ namespace CC::UI
                             curSelectedClips[i] = !curSelectedClips[i];
                     }
                 }
-                if (ImguiMgr::getIO().KeyCtrl && !ImguiMgr::getIO().KeyAlt && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
+                if (XD::ImguiMgr::getIO().KeyCtrl && !XD::ImguiMgr::getIO().KeyAlt && ImGui::IsMouseDragging(ImGuiMouseButton_Left))
                 {
                     if (!_selectStart) {_selectBox.x = _cMousePos.x; _selectBox.y = _cMousePos.y;}
                     _selectBox.z = _cMousePos.x; _selectBox.w = _cMousePos.y;
@@ -201,10 +201,10 @@ namespace CC::UI
                     }
                 }
 
-                if (ImguiMgr::getIO().MouseWheel != 0)
+                if (XD::ImguiMgr::getIO().MouseWheel != 0)
                 {
                     auto _sOld = _s;
-                    _s += ImSign(ImguiMgr::getIO().MouseWheel) * (_s * 0.1f);
+                    _s += ImSign(XD::ImguiMgr::getIO().MouseWheel) * (_s * 0.1f);
                     if (_s <= 0.05f) _s = 0.05f;
                     if (_s > 36.f) _s = 36.f;
 
@@ -221,15 +221,15 @@ namespace CC::UI
                 }
             }
 
-            if (_isMouseInVp && !ImguiMgr::getIO().KeyAlt)
+            if (_isMouseInVp && !XD::ImguiMgr::getIO().KeyAlt)
             {
-                if (!ImguiMgr::getIO().KeyCtrl &&
+                if (!XD::ImguiMgr::getIO().KeyCtrl &&
                     ImGui::IsMouseDragging(ImGuiMouseButton_Left) &&
                     !ImGui::IsWindowCollapsed())
                 {
                     auto dragDelta = ImGui::GetMouseDragDelta(ImGuiMouseButton_Left);
-                    _p0.x += ImguiMgr::getIO().MouseDelta.x;
-                    _p0.y += ImguiMgr::getIO().MouseDelta.y;
+                    _p0.x += XD::ImguiMgr::getIO().MouseDelta.x;
+                    _p0.y += XD::ImguiMgr::getIO().MouseDelta.y;
 
                 }
             }
@@ -250,7 +250,7 @@ namespace CC::UI
         glm::vec2 _changeScale = {1.f, 1.f};
         void ctrlChange()
         {
-            if (!ImGui::IsWindowFocused() || !ImguiMgr::getIO().KeyAlt || _dragOuter)
+            if (!ImGui::IsWindowFocused() || !XD::ImguiMgr::getIO().KeyAlt || _dragOuter)
             {
                 if (_changeData && (_changeOffset != glm::ivec2() || _changeScale != glm::vec2(1.f, 1.f)))
                 {
@@ -321,14 +321,14 @@ namespace CC::UI
                 << _changeFrameP0.x + _changeOffset.x << ", " << _changeFrameP0.y + _changeOffset.y << ")";
         }
 
-        void onShortcut(Shortcut k)
+        void onShortcut(XD::Shortcut k)
         {
             switch (k)
             {
-            case Shortcut::Undo: ClipCtrl::undo();
+            case XD::Shortcut::Undo: ClipCtrl::undo();
                 curSelectedClipsReset = true;
                 return;
-            case Shortcut::Redo: ClipCtrl::redo();
+            case XD::Shortcut::Redo: ClipCtrl::redo();
                 curSelectedClipsReset = true;
                 return;
             default: return;

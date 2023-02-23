@@ -4,8 +4,8 @@
 #include <list>
 
 #include "core/clipCtrl.h"
-#include "entrance.h"
 #include "ui/unit/imgUnit.h"
+#include "xdBase.h"
 
 namespace CC
 {

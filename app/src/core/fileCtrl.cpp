@@ -2,6 +2,7 @@
 
 namespace CC
 {
+    using namespace XD;
     static const std::array support_path =
     {
         std::filesystem::u8path(".png"),

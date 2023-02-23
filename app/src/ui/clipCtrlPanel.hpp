@@ -4,11 +4,11 @@
 
 #include "misc/cpp/imgui_stdlib.h"
 
-#include "base/wndBase.hpp"
 #include "core/clipCtrl.h"
 #include "core/imgCtrl.h"
-#include "entrance.h"
 #include "util/rectTest.hpp"
+#include "xdBase.h"
+#include "xdBase/wndBase.hpp"
 
 #include "staticPanelData.h"
 
@@ -25,7 +25,7 @@ namespace CC::UI
                                         ImGuiWindowFlags_NoScrollbar |
                                         ImGuiWindowFlags_NoResize;
 
-    class CtrlPanel : public WndBase<CtrlPanel>
+    class CtrlPanel : public XD::WndBase<CtrlPanel>
     {
     private:
         // ------------------- 窗口设置
@@ -33,7 +33,7 @@ namespace CC::UI
         ImVec4 clearColor               = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
 
     protected:
-        void onShow(WndDataBaseHolder*) override
+        void onShow(XD::WndDataBaseHolder*) override
         {
             windowFlags |= ImGuiWindowFlags_NoCollapse;
         };
@@ -286,7 +286,7 @@ namespace CC::UI
             {
                 ImVec2 p0 = {minP.x + (p.x / sc) * 26 + 4, minP.y + (p.y / sc) * 26 + 4};
                 dl->AddImage(id, p0, {p0.x + (s.x / sc) * 26, p0.y + (s.y / sc) * 26},
-                    {uvMin.x, uvMin.y}, {uvMax.x, uvMax.y});
+                    {(float)uvMin.x, (float)uvMin.y}, {(float)uvMax.x, (float)uvMax.y});
             });
             dl->AddRect({minP.x + 4, minP.y + 4}, {minP.x + 30, minP.y + 30},
                 IM_COL32_BLACK);
