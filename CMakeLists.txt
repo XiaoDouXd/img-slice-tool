@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.25)
+cmake_minimum_required(VERSION 3.24)
 project(ImgClipTool)        #------ 20230207 切图器
 
 set(CMAKE_CXX_STANDARD 23)

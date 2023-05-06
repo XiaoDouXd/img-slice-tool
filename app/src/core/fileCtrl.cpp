@@ -1,6 +1,6 @@
 #include "fileCtrl.h"
 
-namespace CC
+namespace CC::FileCtrl
 {
     using namespace XD;
     static const std::array support_path =
@@ -12,7 +12,7 @@ namespace CC
         std::filesystem::u8path(".psd")
     };
 
-    static void OnDropFile(std::filesystem::directory_entry dir)
+    static void OnDropFile(const std::filesystem::directory_entry& dir)
     {
         App::logInfo("CC::FileCtrl log - Add files:");
         if (dir.is_directory())
@@ -49,21 +49,21 @@ namespace CC
         FileCtrl::getInst().curDir = dir.path().parent_path();
     }
 
-    std::unique_ptr<FileCtrl::FileCtrlData> FileCtrl::_inst = nullptr;
+    std::unique_ptr<FileCtrl::FileCtrlData> _inst = nullptr;
 
-    void FileCtrl::init()
+    void init()
     {
         if (!_inst) _inst = std::make_unique<FileCtrlData>();
-        StaticEventMgr::registerEvent<StaticEvent::OnDropFile>((std::ptrdiff_t)_inst.get(), OnDropFile);
+        StaticEventMgr::registerEvent<StaticEvent::OnDropFile>(_inst->uuid, OnDropFile);
     }
 
-    FileCtrl::FileCtrlData& FileCtrl::getInst()
+    FileCtrlData& getInst()
     {
         if (!_inst) init();
         return *_inst;
     }
 
-    void FileCtrl::setOutputPath(const std::filesystem::path& out)
+    void setOutputPath(const std::filesystem::path& out)
     {
         if (!_inst) return;
         if (out.is_relative())

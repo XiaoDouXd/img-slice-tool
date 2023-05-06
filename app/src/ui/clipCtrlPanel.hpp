@@ -25,7 +25,7 @@ namespace CC::UI
                                         ImGuiWindowFlags_NoScrollbar |
                                         ImGuiWindowFlags_NoResize;
 
-    class CtrlPanel : public XD::WndBase<CtrlPanel>
+class CtrlPanel : public XD::App::WndBase<CtrlPanel>
     {
     private:
         // ------------------- 窗口设置
@@ -33,7 +33,7 @@ namespace CC::UI
         ImVec4 clearColor               = ImVec4(0.22f, 0.22f, 0.22f, 1.00f);
 
     protected:
-        void onShow(XD::WndDataBaseHolder*) override
+        void onShow(XD::App::WndDataBaseHolder*) override
         {
             windowFlags |= ImGuiWindowFlags_NoCollapse;
         };

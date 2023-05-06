@@ -111,7 +111,7 @@ namespace CC
     void ImgCtrl::clear()
     {
         auto err = vkDeviceWaitIdle(XD::VulkanMgr::getDev());
-        XD::VulkanMgr::checkVkResultCtype(err);
+        XD::VulkanMgr::checkVkResultCType(err);
         return _inst->imgs.clear();
     }
 }

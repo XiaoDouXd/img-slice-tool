@@ -23,26 +23,25 @@ namespace CC::UI
         if (ImgCtrl::empty()) ImgCtrl::pushBack();
         if (picPanelId == 0)
         {
-            auto data = new WndDataDefault();
-            data->onHideCB.emplace_back([](WndBaseHolder& wnd)
+            auto data = new XD::App::WndDataDefault();
+            data->onHideCB.emplace_back([](XD::App::WndBaseHolder& wnd)
             {
                 picPanelId = 0;
                 App::logInfo("CC::MainPanel log - Failure to add file\n");
             });
-            picPanelId = WndMgr::open<ClipPicPanel>(data);
+            picPanelId = XD::App::WndMgr::open<ClipPicPanel>(data);
         }
     }
 
     /// @brief 主窗口遮盖
-    class MainPanel_cover : public WndBase<MainPanel_cover>
+    class MainPanel_cover : public XD::App::WndBase<MainPanel_cover>
     {
     public:
-        MainPanel_cover() : WndBase<MainPanel_cover>(LoopLayer::WndTop) {}
-        static void showCover(bool show)
-        {
+        MainPanel_cover() : WndBase<MainPanel_cover>(XD::App::LoopLayer::WndTop) {}
+        static void showCover(bool show) {
             if (!_this) return;
             _this->open = show;
-        }
+    }
 
     private:
         ImGuiWindowFlags windowFlags    = 0;
@@ -50,7 +49,7 @@ namespace CC::UI
 
         static MainPanel_cover* _this;
     protected:
-        void onShow(WndDataBaseHolder*) override
+        void onShow(XD::App::WndDataBaseHolder*) override
         {
             windowFlags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar;
             windowFlags |= ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoNav;
@@ -63,17 +62,14 @@ namespace CC::UI
             registerEvent<StaticEvent::OnWindowResizeEnd>([](){ showCover(false); });
         }
 
-        void onRefresh() override
-        {
+        void onRefresh() override {
             ImGui::SetWindowSize({(float)App::getW() + 128, (float)App::getH() + 128});
             ImGui::SetWindowPos({-64, -64});
             ImGui::BringWindowToFocusFront(ImGui::GetCurrentWindow());
         }
 
-        bool onWndBegin() override
-        {
-            if (open)
-            {
+        bool onWndBegin() override {
+            if (open) {
                 ImGui::PushStyleColor(ImGuiCol_WindowBg, (ImU32)ImColor(1.f, 1.f, 1.f, 0.f));
                 ImGui::Begin("mainPanel_cover", nullptr, windowFlags);
                 return true;
@@ -96,7 +92,7 @@ namespace CC::UI
         }
     };
 
-    class MainPanel : public WndBase<MainPanel>
+    class MainPanel : public XD::App::WndBase<MainPanel>
     {
     private:
         ImGuiWindowFlags windowFlags    = 0;
@@ -112,7 +108,7 @@ namespace CC::UI
         std::list<std::string> _info;
 
     protected:
-        void onShow(WndDataBaseHolder* ) override
+        void onShow(XD::App::WndDataBaseHolder* ) override
         {
             XD::App::setBGColor(ImVec4(0.22f, 0.22f, 0.22f, 1.00f));
             windowFlags |= ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar;
@@ -123,9 +119,7 @@ namespace CC::UI
             btnPanelFlags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoBackground | ImGuiWindowFlags_NoScrollbar;
             btnPanelFlags |= ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize;
 
-            dockFlags;
-
-            WndMgr::open<MainPanel_cover>();
+            XD::App::WndMgr::open<MainPanel_cover>();
             MainPanel_cover::showCover(false);
 
             onRegister();

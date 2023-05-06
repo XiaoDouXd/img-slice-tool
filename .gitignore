@@ -125,3 +125,6 @@ CTestTestfile.cmake
 
 # Xiaodou ================================
 **/gen/
+.cache
+.idea
+*.code-workspace

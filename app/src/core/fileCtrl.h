@@ -6,24 +6,22 @@
 
 #include "xdBase.h"
 
-namespace CC
+#pragma clang diagnostic push
+#pragma ide diagnostic ignored "OCUnusedGlobalDeclarationInspection"
+
+namespace CC::FileCtrl
 {
-    class FileCtrl
+    class FileCtrlData
     {
     public:
-        class FileCtrlData
-        {
-        public:
-            std::list<std::filesystem::path>    fileQueue;
-            std::filesystem::path               curDir;
-            std::filesystem::path               outputPath;
-        };
-    private:
-        static std::unique_ptr<FileCtrlData> _inst;
-
-    public:
-        static void init();
-        static FileCtrlData& getInst();
-        static void setOutputPath(const std::filesystem::path& out);
+        std::list<std::filesystem::path>    fileQueue;
+        std::filesystem::path               curDir;
+        std::filesystem::path               outputPath;
+        uuids::uuid                         uuid = XD::UUID::gen();
     };
+
+    void init();
+    FileCtrlData& getInst();
+    void setOutputPath(const std::filesystem::path& out);
 }
+#pragma clang diagnostic pop

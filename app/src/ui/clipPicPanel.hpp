@@ -20,7 +20,7 @@ namespace CC::UI
     const ImageUnit::ImageUnitDesc ImageUnit::_emptyImgUnitDesc = {};
 
     /// @brief 主界面 UI
-    class ClipPicPanel : public XD::WndBase<ClipPicPanel>
+class ClipPicPanel : public XD::App::WndBase<ClipPicPanel>
     {
     private:
         // ------------------- 窗口设置
@@ -53,7 +53,7 @@ namespace CC::UI
         std::string _posStr            = {};
 
     protected:
-        void onShow(XD::WndDataBaseHolder*) override
+        void onShow(XD::App::WndDataBaseHolder*) override
         {
             if (ImgCtrl::empty())
             {
@@ -63,7 +63,7 @@ namespace CC::UI
 
             _refreshP0 = true;
             refreshData();
-            XD::WndMgr::open<CtrlPanel>();
+            XD::App::WndMgr::open<CtrlPanel>();
             registerEvent<XD::StaticEvent::OnShortcut>([this](XD::Shortcut k){this->onShortcut(k);});
         }
 

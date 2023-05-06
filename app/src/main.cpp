@@ -1,7 +1,6 @@
 #include "core/clipCtrl.h"
 #include "core/fileCtrl.h"
 #include "ui/mainPanel.hpp"
-#include "ui/staticPanelData.h"
 
 #include "CONF_CLIPTOOL_INI.h"
 #include "IMGS_CLIPTOOLICON_PNG.h"
@@ -9,17 +8,17 @@
 namespace CC
 {
     /// @brief 主循环启动器
-    class MainUnit : public XD::LoopUnit
+    class MainUnit : public XD::App::LoopUnit
     {
     public:
-        MainUnit() : XD::LoopUnit() {}
+        MainUnit() : XD::App::LoopUnit() {}
 
         void start() override
         {
             FileCtrl::init();
             ClipCtrl::init();
 
-            XD::WndMgr::open<UI::MainPanel>();
+            XD::App::WndMgr::open<UI::MainPanel>();
         }
 
         void update() override
