@@ -2,20 +2,9 @@
 
 #### 一、编译环境：
 
-##### 1. 配置 PkgConfig
+##### 1. 配置 freetype2
 
-windows:
-
-1. 前往 http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/
-2. 下载 [pkg-config_0.26-1_win32.zip](http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/pkg-config_0.26-1_win32.zip)
-3. 添加 `bin/pkg-config.exe` 到 `${库目录}`
-4. 下载 [gettext-runtime_0.18.1.1-2_win32.zip](http://ftp.gnome.org/pub/gnome/binaries/win32/dependencies/gettext-runtime_0.18.1.1-2_win32.zip)
-5. 添加 `bin/intl.dll` 到 `${库目录}`
-6. 前往 http://ftp.gnome.org/pub/gnome/binaries/win32/glib/2.28
-7. 下载 [glib_2.28.8-1_win32.zip](http://ftp.acc.umu.se/pub/gnome/binaries/win32/glib/2.28/glib_2.28.8-1_win32.zip)
-8. 添加 `bin/libglib-2.0-0.dll` 到 `${库目录}`
-
-linux: `sudo apt-get install pkg-config`
+下载 [freetype2](https://github.com/freetype/freetype) 并编译，将编译好的静态库和头文件分别放在编译器的库目录和引用目录中。
 
 ##### 2. 配置 vulkan sdk
 
