@@ -30,3 +30,9 @@ sudo apt install vulkan-sdk
 #### 二、生成 rc
 
 编辑项目根目录下的 `Config.cmake` 文件，将 `set(CC_RC_REGEN true)` 一行解除注释。重新生成 cmake 项目，若 `./gui/rc/` 目录下出现了 `gen` 文件夹，则可以初步判断生成成功。生成后请在 `Config.cmake` 中将上述行再度注释，否则会占用大量生成时间。
+
+#### 三、编译结果
+
+![01](./res/readme/01.png)
+
+![02](./res/readme/02.png)
